@@ -1,0 +1,145 @@
+﻿@model Nop.Web.Models.Catalog.SearchModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Search").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-search-page");
+}
+<script type="text/javascript" asp-location="Footer">
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.adv)").click(toggleAdvancedSearch);
+        toggleAdvancedSearch();
+    });
+
+    function toggleAdvancedSearch() {
+        if ($('#@Html.IdFor(model => model.adv)').is(':checked')) {
+            $('#advanced-search-block').show();
+        }
+        else {
+            $('#advanced-search-block').hide();
+        }
+    }
+</script>
+<div class="page search-page">
+    <div class="page-title">
+        <h1>@T("Search")</h1>
+    </div>
+    <div class="page-body">
+        <div class="container">
+            <form asp-route="ProductSearch" method="get">
+                <div class="fieldset">
+                    <div class="form-fields">
+                        <div class="basic-search">
+                            <div class="input-field col s12">
+                                <input asp-for="q" class="search-text" />
+                                <label asp-for="q">@T("Search.SearchTerm"):</label>
+                            </div>
+                            @await Component.InvokeAsync("Widget", new { widgetZone = "productsearch_page_basic" })
+                            <div class="input-field col s12 reversed">
+                                @*@Html.CheckBoxFor(model => model.adv)*@
+                                <input id="adv" type="checkbox" name="adv" value="true" @(Model.adv ? Html.Raw("checked") : Html.Raw("")) />
+                                <label asp-for="adv">@T("Search.AdvancedSearch")</label>
+                                <input name="adv" type="hidden" value="false">
+                            </div>
+                        </div>
+                        <div class="advanced-search" id="advanced-search-block">
+                            @if (Model.AvailableCategories.Count > 0)
+                            {
+                                <div class="input-field col s12">
+                                    <select asp-for="cid" asp-items="Model.AvailableCategories"></select>
+                                    <label asp-for="cid">@T("Search.Category"):</label>
+                                </div>
+                                <div class="input-field col s12">
+                                    @*@Html.CheckBoxFor(model => model.isc)*@
+                                    <input type="checkbox" id="isc" name="isc" value="true" @(Model.isc ? Html.Raw("checked") : Html.Raw("")) />
+                                    <label asp-for="isc">@T("Search.IncludeSubCategories")</label>
+                                    <input name="isc" type="hidden" value="false">
+                                </div>
+                            }
+                            @if (Model.AvailableManufacturers.Count > 0)
+                            {
+                                <div class="input-field col s12">
+                                    <select asp-for="mid" asp-items="Model.AvailableManufacturers"></select>
+                                    <label asp-for="mid">@T("Search.Manufacturer"):</label>
+                                </div>
+                            }
+                            @if (Model.asv && Model.AvailableVendors.Count > 0)
+                            {
+                                <div class="input-field col s12">
+                                    <select asp-for="vid" asp-items="Model.AvailableVendors"></select>
+                                    <label asp-for="vid">@T("Search.Vendor"):</label>
+                                </div>
+                            }
+                            <div class="input-field col s12">
+
+                                <span class="price-range">
+                                    @T("Search.PriceRange.From")
+                                    <input asp-for="pf" class="price-from" />
+                                    @T("Search.PriceRange.To")
+                                    <input asp-for="pt" class="price-to" />
+                                </span>
+                                <label class="active">@T("Search.PriceRange"):</label>
+                            </div>
+                            <div class="input-field col s12">
+                                <input type="checkbox" id="sid" name="sid" value="true" @(Model.sid ? Html.Raw("checked") : Html.Raw("")) />
+                                <label asp-for="sid">@T("Search.SearchInDescriptions")</label>
+                                <input name="sid" type="hidden" value="false">
+                                @*@Html.CheckBoxFor(model => model.sid)*@
+                            </div>
+                            @await Component.InvokeAsync("Widget", new { widgetZone = "productsearch_page_advanced" })
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn waves-effect waves-light">
+                        @T("Search.Button")
+                    </button>
+                </div>
+            </form>
+        </div>
+        @if (Model.Products.Count > 0)
+        {
+            @await Html.PartialAsync("_CatalogSelectors", Model.PagingFilteringContext)
+        }
+        @await Component.InvokeAsync("Widget", new { widgetZone = "productsearch_page_before_results" })
+        <div class="search-results">
+            @if (!string.IsNullOrEmpty(Model.Warning))
+            {
+                <div class="warning">
+                    @Model.Warning
+                </div>
+            }
+            @if (Model.NoResults)
+            {
+                <div class="no-result">
+                    @T("Search.NoResultsText")
+                </div>
+            }
+            
+            @if (Model.Products.Count > 0)
+            {
+                <div class="@(Model.PagingFilteringContext.ViewMode == "list" ? "product-list" : "product-grid")">
+                    <div class="item-grid">
+                        @foreach (var product in Model.Products)
+                        {
+                            <div class="item-box">
+                                @await Html.PartialAsync("_ProductBox", product)
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber").BooleanParameterName("adv").BooleanParameterName("isc").BooleanParameterName("sid").RenderEmptyParameters(true);
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div class="addPaginationClass">
+                    @pager
+                </div>
+            }
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = "productsearch_page_after_results" })
+    </div>
+</div>

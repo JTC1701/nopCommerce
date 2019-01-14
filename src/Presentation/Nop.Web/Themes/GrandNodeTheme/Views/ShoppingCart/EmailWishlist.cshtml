@@ -1,0 +1,57 @@
+﻿@model WishlistEmailAFriendModel
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.WishlistEmailAFriend").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-email-a-friend-page");
+}
+<div class="page email-a-friend-page">
+    
+    <div class="container">
+        <div class="page-title">
+            <h1>@T("Wishlist.EmailAFriend.Title")</h1>
+        </div>
+        @if (Model.SuccessfullySent)
+        {
+            <div class="result">
+                @Model.Result
+            </div>
+        }
+        else
+        {
+            <form asp-route="EmailWishlist" method="post">
+                <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                <div class="fieldset card-panel grey lighten-4">
+                    <div class="form-fields">
+                        <div class="input-field col s12">
+                            <input asp-for="FriendEmail" class="friend-email" placeholder="@T("Wishlist.EmailAFriend.FriendEmail.Hint")" />
+                            <label asp-for="FriendEmail" asp-postfix=":"></label>
+                            <span asp-validation-for="FriendEmail"></span>
+                        </div>
+                        <div class="input-field col s12-field col s12">
+                            <input asp-for="YourEmailAddress" class="your-email" placeholder="@T("Wishlist.EmailAFriend.YourEmailAddress.Hint")" />
+                            <label asp-for="YourEmailAddress" asp-postfix=":"></label>
+                            <span asp-validation-for="YourEmailAddress"></span>
+                        </div>
+                        <div class="input-field col s12">
+                            <input asp-for="PersonalMessage" class="personal-message materialize-textarea" placeholder="@T("Wishlist.EmailAFriend.PersonalMessage.Hint")" />
+                            <label asp-for="PersonalMessage" asp-postfix=":"></label>
+                            <span asp-validation-for="PersonalMessage"></span>
+                        </div>
+                        @if (Model.DisplayCaptcha)
+                        {
+                            <div class="captcha-box">
+                                <nop-captcha />
+                            </div>
+                        }
+                    </div>
+                </div>
+                <button type="submit" name="send-email" class="btn waves-effect waves-light">
+                    @T("Wishlist.EmailAFriend.Button")
+                </button>
+            </form>
+        }
+    </div>
+</div>

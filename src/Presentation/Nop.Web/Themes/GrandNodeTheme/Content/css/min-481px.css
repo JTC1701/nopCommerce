@@ -1,0 +1,150 @@
+@media all and (min-width: 481px) {
+
+
+    /*** GLOBAL ***/
+
+
+    .master-wrapper-content {
+        width: 92.5%;
+    }
+
+
+    /*** GLOBAL TABLES ***/
+
+
+    .cart tr {
+        width: 46%;
+        margin: 40px 2% 0;
+    }
+
+        .cart tr:nth-child(2n+1) {
+            clear: both;
+        }
+
+    .order-details-page .data-table tr {
+        width: 46%;
+        margin: 40px 2% 0;
+    }
+
+        .order-details-page .data-table tr:nth-child(2n+1) {
+            clear: both;
+        }
+
+
+    /*** HEADER ***/
+
+
+    .header-selectors-wrapper > div {
+        display: inline-block;
+        width: 30%;
+        margin: 10px;
+    }
+
+    .ui-autocomplete {
+        width: 280px !important;
+    }
+
+        .ui-autocomplete img {
+            display: inline;
+        }
+
+
+
+
+    /*** CATEGORY ***/
+
+
+    .product-filter {
+        display: table-cell;
+        vertical-align: top;
+        text-align: left;
+    }
+
+        .product-filter.price-range-filter {
+            width: 200px;
+        }
+
+        .product-filter .product-spec-group {
+            float: left;
+            margin: 0 25px 10px 0;
+        }
+
+        .product-filter .group li.item {
+            display: block;
+            margin: 0;
+        }
+
+    .item-box {
+        width: 49%;
+        margin: 0 0.5% 50px;
+    }
+
+        .item-box .product-rating-box {
+            margin: 0 0 15px;
+        }
+
+        .item-box .prices {
+            height: 40px;
+        }
+
+        .item-box .product-title {
+            height: 62px;
+            margin: 0 0 5px;
+        }
+
+        .item-box .product-action-buttons {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+    /*** PRODUCT PAGE ***/
+
+
+    .overview-buttons div {
+        display: inline-block;
+        width: auto;
+        margin: 0 1px 2px;
+    }
+
+
+    /*** WISHLIST ***/
+
+
+    .wishlist-content .button-2 {
+        display: inline-block;
+        width: auto;
+        min-width: 140px;
+        margin: 0 1px 5px;
+    }
+
+
+    /*** TOPICS ***/
+
+
+    .enter-password-form input[type="password"] {
+    }
+
+
+    /*** FORUM & PROFILE ***/
+
+    .forums-header {
+        padding: 30px 20px 20px;
+    }
+
+    .ui-tabs-nav li {
+        display: inline-block;
+        min-width: 150px;
+        margin: 0 5px -1px;
+        /*override jQuery UI styles, do not delete doubled properties*/
+        margin: 0 5px -1px !important;
+    }
+
+    .private-messages-page .buttons .button-1,
+    .private-messages-page .buttons .button-2,
+    .private-message-view-page .buttons .button-1,
+    .private-message-view-page .buttons .button-2 {
+        display: inline-block;
+        width: auto;
+        margin: 1px;
+    }
+}

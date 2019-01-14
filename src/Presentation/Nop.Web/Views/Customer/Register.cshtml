@@ -15,6 +15,7 @@
             $("#@Html.IdFor(model => model.CountryId)").change(function () {
                 var selectedItem = $(this).val();
                 var ddlStates = $("#@Html.IdFor(model => model.StateProvinceId)");
+                //var ddlStates = $("#StateProvinceId");
                 var statesProgress = $("#states-loading-progress");
                 statesProgress.show();
                 $.ajax({
@@ -220,8 +221,9 @@
                         }
                         @if (Model.CountryEnabled)
                         {
+                            
                             <div class="inputs">
-                                <label asp-for="CountryId" asp-postfix=":"></label>
+                                <label asp-for="CountryId" asp-postfix=":" ></label>
                                 <select asp-for="CountryId" asp-items="Model.AvailableCountries"></select>
                                 @if (Model.CountryRequired)
                                 {
@@ -229,19 +231,22 @@
                                 }
                                 <span asp-validation-for="CountryId"></span>
                             </div>
+                            
                         }
                         @if (Model.CountryEnabled && Model.StateProvinceEnabled)
                         {
-                            <div class="inputs">
-                                <label asp-for="StateProvinceId" asp-postfix=":"></label>
-                                <select asp-for="StateProvinceId" asp-items="Model.AvailableStates"></select>
-                                @if (Model.StateProvinceRequired)
-                                {
-                                    <nop-required />
-                                }
-                                <span asp-validation-for="StateProvinceId"></span>
-                                <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
-                            </div>
+                            
+                                <div class="inputs">
+                                    <label asp-for="StateProvinceId" asp-postfix=":"></label>
+                                    <select asp-for="StateProvinceId" asp-items="Model.AvailableStates"></select>
+                                    @if (Model.StateProvinceRequired)
+                                    {
+                                        <nop-required />
+                                    }
+                                    <span asp-validation-for="StateProvinceId"></span>
+                                    <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
+                                </div>
+                           
                         }
                     </div>
                 </div>

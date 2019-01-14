@@ -1,0 +1,53 @@
+﻿@using Nop.Core.Infrastructure;
+@{
+    var settings = EngineContext.Current.Resolve<Nop4you.Plugin.Widgets.ThemeGrandNode.ThemeGrandNodeSettings>();
+    string className = "";
+    string headSideNav = "";
+    if (settings.sideNav)
+    {
+        className = "sideNavOption";
+        headSideNav = "sideNavOn";
+    }
+}
+    @await Component.InvokeAsync("Widget", new { widgetZone = "switchstylesheet" })
+    <div class="header @headSideNav">
+        @await Component.InvokeAsync("Widget", new { widgetZone = "header_before" })
+        <div class="header-upper">
+            <div class="container">
+                <div class="header-selectors-wrapper">
+                    @await Component.InvokeAsync("TaxTypeSelector")
+                    @await Component.InvokeAsync("CurrencySelector")
+                    @await Component.InvokeAsync("LanguageSelector")
+                    @await Component.InvokeAsync("Widget", new { widgetZone = "header_selectors" })
+                </div>
+                <div class="header-links-wrapper">
+                    @await Component.InvokeAsync("HeaderLinks")
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = "header_middle" })
+        <div class="container header-lower @className">
+            <div class="row">
+                <div class="header-logo col s12 m3">
+                    @*<a href="@Url.RouteUrl("HomePage")">*@
+                        @await Component.InvokeAsync("Logo")
+                    @*</a>*@
+                </div>
+                <div class="search-box input-field col s12 m6">
+                    @*@await Component.InvokeAsync("SearchBox")*@
+                </div>
+                <div class="col s12 m3" id="topcartlink">
+                    <div class="topcart">
+                        <a class="btn waves-effect waves-light" href="@Url.RouteUrl("ShoppingCart")">
+                            <span class="cart-label">@T("ShoppingCart")</span>
+                            <span class="cart-qty">@T("ShoppingCart.HeaderQuantity")</span>
+                            <i class="material-icons left">shopping_cart</i>
+                        </a>
+                        @await Component.InvokeAsync("FlyoutShoppingCart")
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("Widget", new { widgetZone = "header_after" })
+    </div>

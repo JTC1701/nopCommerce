@@ -1,5 +1,6 @@
 ﻿@model TopMenuModel.CategoryLineModel
-<li>
+@*Removed Top Menu per request - Tim*@
+@*<li>
     <a href="@Url.RouteUrl("Category", new { SeName = Model.Category.SeName })">@Model.Category.Name
     @if (Model.Category.NumberOfProducts.HasValue)
     {
@@ -36,4 +37,4 @@
             </ul>
         }
     }
-</li>
+</li>*@

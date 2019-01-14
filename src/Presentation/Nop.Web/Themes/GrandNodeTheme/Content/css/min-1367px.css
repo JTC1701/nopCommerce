@@ -1,0 +1,143 @@
+@media all and (min-width: 1367px) {
+
+
+    /*** GLOBAL STYLES ***/
+
+
+    .master-wrapper-content {
+        width: 1200px;
+    }
+
+    .inputs label {
+        width: 375px;
+    }
+
+    .center-2 .inputs label {
+        width: 213px;
+    }
+
+    .fieldset .form-fields .inputs label {
+        width: 85px;
+    }
+
+    /*** NAVIGATION ***/
+
+    .header-menu > ul > li {
+        padding: 0 20px;
+    }
+
+        .header-menu > ul > li > a,
+        .header-menu > ul > li > span {
+            font-size: 18px;
+        }
+
+
+    /*** FOOTER ***/
+
+
+    .footer-upper {
+        width: 1200px;
+        padding: 35px 30px;
+    }
+
+    .footer-block {
+        width: 280px;
+    }
+
+    .footer-lower {
+        width: 1200px;
+        padding: 25px 20px;
+    }
+
+
+    /*** PRODUCT REVIEWS ***/
+
+
+    .product-review-item .review-title {
+        max-width: 1050px;
+    }
+
+
+    /*** REGISTRATION, LOGIN, ACCOUNT ***/
+
+
+    .login-page .returning-wrapper input[type="text"],
+    .login-page .returning-wrapper input[type="password"] {
+    }
+
+
+    /*** SHOPPING CART ***/
+
+
+    .cart-footer .totals {
+        width: 395px;
+        margin: 0;
+    }
+
+    .cart-footer .cart-collaterals {
+        width: 760px;
+        margin: 0;
+    }
+
+        .cart-footer .cart-collaterals .deals {
+            float: left;
+            width: 360px;
+        }
+
+        .cart-footer .cart-collaterals .shipping {
+            float: right;
+            width: 360px;
+        }
+
+    .cart-footer .estimate-shipping .inputs label {
+        display: inline-block;
+        width: 35%;
+    }
+
+    .cart-footer .estimate-shipping .inputs input,
+    .cart-footer .estimate-shipping .inputs select {
+        width: 65%;
+    }
+
+
+    /*** CHECKOUT ***/
+
+
+    .shipping-method .method-list li,
+    .payment-method .method-list li {
+        margin: 20px 1%;
+    }
+
+    .payment-info .info td:first-child {
+        width: 375px !important;
+    }
+
+    .payment-info .info td:only-child {
+        width: 100% !important;
+    }
+
+
+    /*** FORUM & PROFILE ***/
+
+
+    .forum-actions .pager,
+    .topic-actions .pager {
+        max-width: 600px !important;
+    }
+
+    .item-box .product-action-buttons {
+        top: 12px;
+        left: 12px;
+        opacity: 0;
+        position: absolute;
+    }
+
+    .item-box:hover .product-action-buttons {
+        opacity: 1;
+        transition: all linear .3s;
+        -o-transition: all linear .3s;
+        -ms-transition: all linear .3s;
+        -moz-transition: all linear .3s;
+        -webkit-transition: all linear .3s;
+    }
+}

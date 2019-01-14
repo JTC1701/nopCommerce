@@ -1,0 +1,32 @@
+﻿@model ProductDetailsModel.GiftCardModel
+@if (Model.IsGiftCard)
+{
+    <div class="giftcard">
+        <div class="input-field col s12">
+            <input asp-for="RecipientName" class="recipient-name" />
+            <label asp-for="RecipientName" asp-postfix=":"></label>
+        </div>
+        @if (Model.GiftCardType == Nop.Core.Domain.Catalog.GiftCardType.Virtual)
+        {
+            <div class ="input-field col s12">
+                <input asp-for="RecipientEmail" class="recipient-email" />
+                <label asp-for="RecipientEmail" asp-postfix=":"></label>
+            </div>
+        }
+        <div class="input-field col s12">
+            <input asp-for="SenderName" class="sender-name" />
+            <label asp-for="SenderName" asp-postfix=":"></label>
+        </div>
+        @if (Model.GiftCardType == Nop.Core.Domain.Catalog.GiftCardType.Virtual)
+        {
+            <div class="input-field col s12">
+                <input asp-for="SenderEmail" class="sender-email" />
+                <label asp-for="SenderEmail" asp-postfix=":"></label>
+            </div>
+        }
+        <div class="input-field col s12">
+            <textarea asp-for="Message" class="message materialize-textarea"></textarea>
+            <label asp-for="Message" asp-postfix=":">@T("Products.GiftCard.Message"):</label>
+        </div>
+    </div>
+}

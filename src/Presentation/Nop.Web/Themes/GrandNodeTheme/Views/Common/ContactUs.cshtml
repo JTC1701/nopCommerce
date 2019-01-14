@@ -1,0 +1,74 @@
+﻿@model ContactUsModel
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ContactUs").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-contact-page");
+}
+
+<div class="container">
+    <div class="page-title">
+        <h1>@T("PageTitle.ContactUs")</h1>
+    </div>
+    @await Component.InvokeAsync("TopicBlock", new { systemName = "ContactUs" })
+    @await Component.InvokeAsync("Widget", new { widgetZone = "contactus_top" })
+    @if (Model.SuccessfullySent)
+    {
+        <div class="result">
+            @Model.Result
+        </div>
+    }
+    else
+    {
+        <form asp-route="ContactUs" method="post">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            <div class="fieldset card-panel grey lighten-4">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_circle</i>
+                        <label asp-for="FullName" asp-postfix=":"></label>
+                        <input asp-for="FullName" placeholder="@T("ContactUs.FullName.Hint")" class="fullname" />
+                        <nop-required />
+                        <span asp-validation-for="FullName"></span>
+                    </div>
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">email</i>
+                        <label asp-for="Email" asp-postfix=":"></label>
+                        <input asp-for="Email" placeholder="@T("ContactUs.Email.Hint")" class="email" />
+                        <nop-required />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                    @if (Model.SubjectEnabled)
+                    {
+                        <div class="input-field col s12">
+                            <i class="material-icons prefix">subject</i>
+                            <label asp-for="Subject" asp-postfix=":"></label>
+                            <input asp-for="Subject" placeholder="@T("ContactUs.Subject.Hint")" class="subject" />
+                            <nop-required />
+                            <span asp-validation-for="Subject"></span>
+                        </div>
+                    }
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">comment</i>
+                        <label asp-for="Enquiry" asp-postfix=":"></label>
+                        <textarea asp-for="Enquiry" placeholder="@T("ContactUs.Enquiry.Hint")" class="enquiry materialize-textarea"></textarea>
+                        <nop-required />
+                        <span asp-validation-for="Enquiry"></span>
+                    </div>
+                    @if (Model.DisplayCaptcha)
+                    {
+                        <div class="captcha-box">
+                            <nop-captcha />
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <button type="submit" name="send-email" class="btn waves-effect waves-light" value="@T("ContactUs.Button")">@T("ContactUs.Button")<i class="material-icons right">send</i></button>
+
+        </form>
+    }
+    @await Component.InvokeAsync("Widget", new { widgetZone = "contactus_bottom" })
+</div>

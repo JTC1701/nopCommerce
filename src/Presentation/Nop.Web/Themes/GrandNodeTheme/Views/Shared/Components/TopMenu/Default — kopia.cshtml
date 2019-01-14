@@ -1,0 +1,388 @@
+﻿@model TopMenuModel
+@using Nop.Core.Domain.Customers;
+@using Nop.Web.Models.Catalog;
+@using Nop.Web.Models.Common;
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Customers;
+@using Nop.Core;
+@{
+    var settings = EngineContext.Current.Resolve<Nop4you.Plugin.Widgets.ThemeGrandNode.ThemeGrandNodeSettings>();
+    var customer = EngineContext.Current.Resolve<IWorkContext>().CurrentCustomer;
+}
+
+<!--//subcategories-->
+
+@*@helper RenderCategorySecondLine(CategorySimpleModel category, int level, bool responsiveMobileMenu)
+{
+    <li>
+        <a href="@Url.RouteUrl("Category", new { SeName = category.SeName })">
+            @category.Name
+            @if (category.NumberOfProducts.HasValue)
+            {
+                <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+            }
+        </a>
+    </li>
+}*@
+
+
+<!--//categories-->
+@*@helper RenderCategoryLine(CategorySimpleModel category, int level, bool responsiveMobileMenu)
+{
+    <li>
+        <a class="dropdown-button" href="@Url.RouteUrl("Category", new { SeName = category.SeName })" data-activates="dropdown@(category.Id)">
+            @category.Name
+            @if (category.NumberOfProducts.HasValue)
+            {
+                <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+            }
+        </a>
+
+        @{
+            var subCategories = responsiveMobileMenu ?
+                //responsive (all categories)
+                category.SubCategories :
+                //standard design (only categories with "IncludeInTopMenu")
+                category.SubCategories.Where(x => x.IncludeInTopMenu).ToList();
+            if (subCategories.Count > 0)
+            {
+                <ul id="dropdown@(category.Id)" class="dropdown-content">
+                    @foreach (var subCategory in subCategories)
+                    {
+                        @RenderCategorySecondLine(subCategory, level + 1, responsiveMobileMenu)
+                    }
+                </ul>
+            }
+        }
+
+    </li>
+}*@
+
+<!--//categories on mobile-->
+@*@helper RenderCategoryLineMobile(CategorySimpleModel category, int level)
+{
+
+    <li class="no-padding">
+        <ul class="collapsible collapsible-accordion">
+            <li class="bold">
+
+                <a class="collapsible-header waves-effect"
+                   @{ if (category.SubCategories.Count == 0) { <text> href=@Url.RouteUrl("Category", new { SeName = category.SeName })</text>;
+                       }
+                   }>
+                    @category.Name
+                    @if (category.NumberOfProducts.HasValue)
+                    {
+                        <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+
+                    }
+                        </a>
+                        @{
+                            var subCategories = category.SubCategories;
+                            <div class="collapsible-body">
+                                <ul>
+                                    @foreach (var subCategory in subCategories)
+                                    {
+                                        @RenderCategorySecondLine(subCategory, level + 1, false)
+                                    }
+                                </ul>
+                            </div>
+                        }
+
+                    </li>
+                </ul>
+            </li>
+}*@
+
+@*@helper RenderCategoryLineSideNav(CategorySimpleModel category, int level)
+{
+
+    <li class="no-padding">
+        @if (category.SubCategories.Count == 0)
+        {
+            <ul>
+                <li class="bold">
+                    <a class="waves-effect" href=@Url.RouteUrl("Category", new { SeName = category.SeName })>
+                        @category.Name
+                        @if (category.NumberOfProducts.HasValue)
+                        {
+                            <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+                        }
+                    </a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <ul class="collapsible collapsible-accordion">
+                <li class="bold">
+                    <a class="collapsible-header waves-effect"
+                       @{ if (category.SubCategories.Count == 0)
+                           { <text> href=@Url.RouteUrl("Category", new { SeName = category.SeName })</text>;
+                           } }>
+                        @category.Name
+                        @if (category.NumberOfProducts.HasValue)
+                        {
+                            <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+
+                        }
+                    </a>
+                    
+                    @{
+                        var subCategories = category.SubCategories;
+                        <div class="collapsible-body">
+                            <ul>
+                                @foreach (var subCategory in subCategories)
+                                {
+                                    @RenderCategorySecondLine(subCategory, level + 1, false)
+                                }
+                            </ul>
+                        </div>
+                    }
+
+                </li>
+            </ul>
+        }
+        
+    </li>
+}*@
+
+@if (settings.sideNav)
+{
+    <ul id="slide-out" class="side-nav">
+        
+        @if (!string.IsNullOrEmpty(customer.GetFullName().ToString()))
+        {
+            <li class="user-info-view">
+                <div class="userView">
+                    <span class="black-text name small">@customer.GetFullName().ToString()</span>
+                    @if (!string.IsNullOrEmpty(customer.Email.ToString()))
+                    {
+                    <a href="@Url.RouteUrl("CustomerInfo")">
+                        <span class="black-text email small">@customer.Email</span>
+                    </a>
+                    }
+                    <span class="black-text ip small">@customer.LastIpAddress</span>
+                </div>
+            </li>
+        }
+
+        @if (Model.DisplayHomePageMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+        }
+        @{
+            var rootCategoriesMobile = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+        }
+
+        @foreach (var category in rootCategoriesMobile)
+        {
+            var categoryLineModel = new TopMenuModel.CategoryLineModel
+             {
+                Category = category
+             };
+            @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+        }
+        @foreach (var topic in Model.Topics)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("topic", new { sename=topic.SeName })">@topic.Name</a></li>
+        }
+        @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+        }
+        @if (Model.DisplayProductSearchMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+        }
+        @if (Model.DisplayCustomerInfoMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+        }
+        @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+        }
+        @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+        }
+        @if (Model.DisplayContactUsMenuItem)
+        {
+            <li class="bold"><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+        }
+    </ul>
+    <div class="gnt-side-nav-wrapper">
+        <a href="#" data-activates="slide-out" class="button-collapse gnt-side-nav"><i class="material-icons">menu</i></a>
+    </div>
+            }
+            else
+            {
+                <div id="header-menu-desktop" class="header-menu">
+                    <nav>
+                        <div class="container nav-wrapper">
+
+                            <!-- mobile side menu -->
+                            <a href="#" data-activates="slide-out" class="button-collapse">
+                                <i class="material-icons">menu</i>
+                            </a>
+                            <ul class="side-nav" id="slide-out">
+                                @await Component.InvokeAsync("Widget", new { widgetZone = "header_menu_before" })
+                                @if (Model.DisplayHomePageMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+                                }
+                                @{
+                                    var rootCategoriesMobile = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+                                }
+
+                                @foreach (var category in rootCategoriesMobile)
+                                {
+                                    @*@RenderCategoryLineMobile(category, 0)*@
+                                    @*var categoryLineModel = new TopMenuModel.CategoryLineModel
+                                    {
+                                        Category = category,
+                                        ResponsiveMobileMenu = true
+                                    };
+                                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)*@
+
+                                    <li class="no-padding">
+                                        <ul class="collapsible collapsible-accordion">
+                                            <li class="bold">
+                                                <a class="collapsible-header waves-effect"
+                                                   @{ 
+                                                       if (category.SubCategories.Count == 0) { <text> href=@Url.RouteUrl("Category", new { SeName = category.SeName })</text>; }
+                                                   }>
+                                                    @category.Name
+                                                    @if (category.NumberOfProducts.HasValue)
+                                                    {
+                                                        <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+                                                    }
+                                                </a>
+                                                @{
+                                                    var subCategories = category.SubCategories;
+                                                    <div class="collapsible-body">
+                                                        <ul>
+                                                            @foreach (var subCategory in subCategories)
+                                                            {
+                                                                @*@RenderCategorySecondLine(subCategory, level + 1, false)*@
+                                                                <li>
+                                                                    <a href="@Url.RouteUrl("Category", new { SeName = category.SeName })">
+                                                                        @category.Name
+                                                                        @if (category.NumberOfProducts.HasValue)
+                                                                        {
+                                                                            <text> </text>@T("Categories.TotalProducts", category.NumberOfProducts.Value)
+                                                                        }
+                                                                    </a>
+                                                                </li>
+}
+                                                        </ul>
+                                                    </div>
+                                                }
+
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                    @* ends *@
+                                }
+                                @foreach (var topic in Model.Topics)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("topic", new { sename=topic.SeName })">@topic.Name</a></li>
+                                }
+                                @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+                                }
+                                @if (Model.DisplayProductSearchMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+                                }
+                                @if (Model.DisplayCustomerInfoMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+                                }
+                                @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+                                }
+                                @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+                                }
+                                @if (Model.DisplayContactUsMenuItem)
+                                {
+                                    <li class="bold"><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+                                }
+                                @await Component.InvokeAsync("Widget", new { widgetZone = "header_menu_after" })
+                            </ul>
+
+                            <!-- top-menu -->
+                            <ul class="top-menu">
+
+                                @await Component.InvokeAsync("Widget", new { widgetZone = "header_menu_before" })
+                                @if (Model.DisplayHomePageMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+                                }
+                                @{
+                                    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+                                }
+
+                                @foreach (var category in rootCategories)
+                                {
+                                    var categoryLineModel = new TopMenuModel.CategoryLineModel
+                                    {
+                                      Category = category
+                                    };
+                                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                                }
+                                @foreach (var topic in Model.Topics)
+                                {
+                                    <li><a href="@Url.RouteUrl("Topic", new { SeName=topic.SeName })">@topic.Name</a></li>
+                                }
+                                @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+                                }
+                                @if (Model.DisplayProductSearchMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+                                }
+                                @if (Model.DisplayCustomerInfoMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+                                }
+                                @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+                                }
+                                @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+                                }
+                                @if (Model.DisplayContactUsMenuItem)
+                                {
+                                    <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+                                }
+                                @await Component.InvokeAsync("Widget", new { widgetZone = "header_menu_after" })
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                                    }
+
+
+
+<script type="text/javascript" asp-location="Footer">
+    $(document).ready(function () {
+        $(".button-collapse").sideNav();
+        $(".collapsible").collapsible();
+        $(".dropdown-button").dropdown({
+            hover: true
+        });
+    });
+</script>
+
+
+

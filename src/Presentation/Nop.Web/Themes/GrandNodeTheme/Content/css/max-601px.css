@@ -1,0 +1,7 @@
+@media only screen and (max-width: 601px) {
+    footer.page-footer .footer-copyright span {
+        display: block;
+        float: left !important;
+        clear: both;
+    }
+}

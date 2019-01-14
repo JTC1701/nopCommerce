@@ -1,0 +1,99 @@
+﻿@using Nop.Core.Domain
+@using StackExchange.Profiling
+@using Nop.Core.Domain.Common
+@using Nop.Core.Domain.Seo
+@using Nop.Services.Events
+@using Nop.Services.Security
+@using Nop.Web.Framework.Events
+@using Nop.Core.Infrastructure
+@inject CommonSettings commonSettings
+@inject IEventPublisher eventPublisher
+@inject IPermissionService permissionService
+@inject SeoSettings seoSettings
+@inject StoreInformationSettings storeInformationSettings
+@inject IThemeContext themeContext
+@{
+    var themeName = themeContext.WorkingThemeName;
+    var settings = EngineContext.Current.Resolve<Nop4you.Plugin.Widgets.ThemeGrandNode.ThemeGrandNodeSettings>();
+
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.ajaxcart.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/js/public.common.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-migrate-1.2.1.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-ui-1.10.3.custom.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery.validate.unobtrusive.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery.validate.min.js");
+    Html.AppendScriptParts(ResourceLocation.Head, $"~/Themes/{themeName}/Content/js/materializeInit.js");
+    //Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/Content/js/materialize.js");
+    Html.AppendScriptParts(ResourceLocation.Head, $"~/Themes/{themeName}/Content/js/materialize976.js");
+
+
+    //jQuery is the only js file in the head. if we decide to move it to the footer, then ensure that all inline scripts (with jQuery usage) with are also moved to the footer
+    //the issue that it's not possible in some cases (e.g. "Edit address", when Ajax request is made on one-page checkout)
+    Html.AppendScriptParts(ResourceLocation.Head, "~/lib/jquery-1.10.2.min.js");
+    //X-UA-Compatible tag
+    if (commonSettings.RenderXuaCompatible)
+    {
+        Html.AppendHeadCustomParts($"<meta http-equiv=\"X-UA-Compatible\" content=\"{commonSettings.XuaCompatibleValue}\"/>");
+    }
+    //custom tag(s);
+    if (!string.IsNullOrEmpty(seoSettings.CustomHeadTags))
+    {
+        Html.AppendHeadCustomParts(seoSettings.CustomHeadTags);
+    }
+    var displayMiniProfiler = storeInformationSettings.DisplayMiniProfilerInPublicStore
+        && (!storeInformationSettings.DisplayMiniProfilerForAdminOnly || permissionService.Authorize(StandardPermissionProvider.AccessAdminPanel));
+    //event
+    eventPublisher.Publish(new PageRenderingEvent(this.Html));
+
+}
+<!DOCTYPE html>
+<html @(this.ShouldUseRtlTheme() ? Html.Raw(" dir=\"rtl\"") : null) @Html.NopPageCssClasses()>
+<head>
+    <title>@Html.NopTitle()</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="@(Html.NopMetaDescription())" />
+    <meta name="keywords" content="@(Html.NopMetaKeywords())" />
+    <meta name="generator" content="grandnode" />
+    <meta name="generator-version" content="@settings.version">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    @Html.NopHeadCustom()
+    @*This is used so that themes can inject content into the header*@
+    @await Html.PartialAsync("Head")
+    @await Component.InvokeAsync("Widget", new { widgetZone = "head_html_tag" })
+    @Html.NopCssFiles(this.Url, ResourceLocation.Head)
+    @Html.NopScripts(this.Url, ResourceLocation.Head)
+    @Html.NopCanonicalUrls()
+    @await Component.InvokeAsync("NewsRssHeaderLink")
+    @await Component.InvokeAsync("BlogRssHeaderLink")
+    @*Favicon - upload favicon.ico file to the root directory*@
+    @await Component.InvokeAsync("Favicon")
+    @if (displayMiniProfiler)
+    {
+        <mini-profiler />
+    }
+    @Html.NopInlineScripts(this.Url, ResourceLocation.Head)
+
+    <link rel="stylesheet" media="(max-width: 1000px)" href="/Themes/GrandNodeTheme/Content/css/max-1000px.css">
+    <link rel="stylesheet" media="(max-width: 601px)" href="/Themes/GrandNodeTheme/Content/css/max-601px.css">
+    <link rel="stylesheet" media="(min-width: 1001px)" href="/Themes/GrandNodeTheme/Content/css/min-1001px.css">
+    <link rel="stylesheet" media="(min-width: 1025px)" href="/Themes/GrandNodeTheme/Content/css/min-1025px.css">
+    <link rel="stylesheet" media="(min-width: 1367px)" href="/Themes/GrandNodeTheme/Content/css/min-1367px.css">
+    <link rel="stylesheet" media="(min-width: 481px)" href="/Themes/GrandNodeTheme/Content/css/min-481px.css">
+    <link rel="stylesheet" media="(min-width: 601px and max-width: 768px)" href="/Themes/GrandNodeTheme/Content/css/min-601-max768px.css">
+    <link rel="stylesheet" media="(min-width: 601px)" href="/Themes/GrandNodeTheme/Content/css/min-601px.css">
+    <link rel="stylesheet" media="(min-width: 768px and max-width: 1024px)" href="/Themes/GrandNodeTheme/Content/css/min-768-max1024px.css">
+    <link rel="stylesheet" media="(min-width: 769px)" href="/Themes/GrandNodeTheme/Content/css/min-769px.css">
+</head>
+<body>
+    @RenderBody()
+    @Html.NopCssFiles(this.Url, ResourceLocation.Footer)
+    @Html.NopScripts(this.Url, ResourceLocation.Footer)
+    @Html.NopInlineScripts(this.Url, ResourceLocation.Footer)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('select').material_select();
+        });
+    </script>
+</body>
+</html>

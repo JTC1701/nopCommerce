@@ -1,0 +1,89 @@
+﻿@model BlogPostListModel
+@using Nop.Web.Models.Blogs;
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Blog").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-blog-page");
+}
+@section left {
+    @await Component.InvokeAsync("Widget", new { widgetZone = "left_side_column_blog_before" })
+    @await Component.InvokeAsync("BlogMonths")
+    @await Component.InvokeAsync("Widget", new { widgetZone = "left_side_column_after_blog_archive" })
+    @await Component.InvokeAsync("BlogTags")
+    @await Component.InvokeAsync("Widget", new { widgetZone = "left_side_column_blog_after" })
+}
+<div class="page blog-page">
+    <div class="page-title">
+        <a href="@Url.RouteUrl("BlogRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("Blog.RSS.Hint")">@T("Blog.RSS")</a>
+        <h1>
+            @if (string.IsNullOrEmpty(Model.PagingFilteringContext.Tag))
+            {
+                if (Model.PagingFilteringContext.GetParsedMonth().HasValue)
+                {
+                @string.Format(T("Blog.FilteredByMonth").Text, Model.PagingFilteringContext.GetParsedMonth().Value.Year, Model.PagingFilteringContext.GetParsedMonth().Value.ToString("MMMM"))
+                }
+                else
+                {
+                @T("Blog")
+                }
+            }
+            else
+            {
+                @string.Format(T("Blog.TaggedWith").Text, Model.PagingFilteringContext.Tag)
+            }
+        </h1>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_before_posts" })
+        <div class="row">
+            @foreach (var item in Model.BlogPosts)
+            {
+                <div class="col s12 card">
+                    <div class="card-content">
+                        <a class="card-title" href="@Url.RouteUrl("BlogPost", new { SeName = item.SeName })">@item.Title</a>
+                        <span class="card-date">@item.CreatedOn.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_before_post_body", additionalData = item.Id })
+                    <div class="card-content">
+                        @Html.Raw(!string.IsNullOrEmpty(item.BodyOverview) ? item.BodyOverview : item.Body)
+                    </div>
+                    @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_after_post_body", additionalData = item.Id })
+                    <div class="blog-details">
+                        @if (item.Tags.Count > 0)
+                        {
+                            <div class="card-tags">
+                                <ul>
+                                    @for (var i = 0; i < item.Tags.Count; i++)
+                                    {
+                                        var tag = item.Tags[i];
+                                        <li><a class="chip" href="@Url.RouteUrl("BlogByTag", new { tag = tag })">@tag</a></li>
+
+                                    }
+                                </ul>
+                            </div>
+                        }
+                        <div class="card-action">
+                            <button onclick="location.href='@Url.RouteUrl("BlogPost", new { SeName = item.SeName })'" class="btn waves-effect waves-light" type="submit">@T("Blog.MoreInfo")</button>
+                        </div>
+                        @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_inside_post", additionalData = item.Id })
+                    </div>
+                    @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_after_post", additionalData = item.Id })
+                </div>
+            }
+               
+            @{
+                var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+            }
+            @if (!pager.IsEmpty())
+            {
+                <div>
+                    @pager
+                </div>
+            }
+            @await Component.InvokeAsync("Widget", new { widgetZone = "bloglist_page_after_posts" })
+        </div>
+    </div>
+</div>

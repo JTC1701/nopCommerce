@@ -17,9 +17,10 @@
         <div class="header-logo">
             @await Component.InvokeAsync("Logo")
         </div>
-        <div class="search-box store-search-box">
+        @*Removed Search Box per request - Tim*@
+        @*<div class="search-box store-search-box">
             @await Component.InvokeAsync("SearchBox")
-        </div>
+        </div>*@
     </div>
     @await Component.InvokeAsync("Widget", new { widgetZone = "header_after" })
 </div>

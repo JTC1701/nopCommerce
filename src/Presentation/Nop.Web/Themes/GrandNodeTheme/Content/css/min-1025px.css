@@ -1,0 +1,59 @@
+@media all and (min-width: 1025px) {
+    .home-page .product-grid .item-box {
+        width: 24%;
+        margin: 0 0.5% 50px;
+    }
+
+    .checkout-page .billing-addresses,
+    .checkout-page .shipping-addresses {
+        display: flex;
+    }
+
+        .checkout-page .billing-addresses .title,
+        .checkout-page .shipping-addresses .title {
+            text-align: left;
+        }
+
+        .checkout-page .billing-addresses > .select-billing-address,
+        .checkout-page .shipping-addresses > .select-shipping-address {
+            width: 44%;
+        }
+
+    .checkout-page #opc-shipping .shipping-addresses > .select-shipping-address {
+        width: 100%;
+    }
+
+    .checkout-page .billing-addresses > .new-billing-address,
+    .checkout-page .shipping-addresses > .new-shipping-address {
+        width: 55%;
+    }
+
+    .order-summary {
+        width: 100%;
+    }
+
+    .item-box .product-action-buttons {
+        top: 12px;
+        left: 12px;
+        opacity: 0;
+        margin-top: 0;
+        position: absolute;
+    }
+
+    .item-box:hover .product-action-buttons {
+        opacity: 1;
+        transition: all linear .13s;
+        -o-transition: all linear .13s;
+        -ms-transition: all linear .13s;
+        -moz-transition: all linear .13s;
+        -webkit-transition: all linear .13s;
+    }
+
+    .product-list .item-box .product-action-buttons {
+        margin-top: -12px;
+    }
+
+    .item-box .buttons {
+        text-align: left;
+    }
+}

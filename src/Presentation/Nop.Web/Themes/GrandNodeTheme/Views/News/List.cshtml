@@ -1,0 +1,46 @@
+﻿@model NewsItemListModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.NewsArchive").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-news-list-page");
+}
+<div class="page news-list-page">
+    <div class="page-title">
+        <a href="@Url.RouteUrl("NewsRSS", new { languageId = Model.WorkingLanguageId })" class="link-rss" title="@T("News.RSS.Hint")">@T("News.RSS")</a>
+        <h1>@T("News")</h1>
+    </div>
+    <div class="page-body">
+        @await Component.InvokeAsync("Widget", new { widgetZone = "newslist_page_before_items" })
+        <div class="row">
+            @foreach (var item in Model.NewsItems)
+            {
+                <div class="col s12 card">
+                    <div class="card-content">
+                        <a class="card-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
+                        <span class="card-date">@item.CreatedOn.ToString("dd/MM/yyyy")</span>
+                    </div>
+                    <div class="card-content">
+                        @Html.Raw(item.Short)
+                    </div>
+                    <div class="card-action">
+                        <button onclick="location.href='@Url.RouteUrl("NewsItem", new { SeName = item.SeName })'" class="btn waves-effect waves-light" type="submit">@T("News.MoreInfo")</button>
+                    </div>
+                    @await Component.InvokeAsync("Widget", new { widgetZone = "newslist_page_inside_item", additionalData = item.Id })
+                </div>
+            }
+        </div>
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="addPaginationClass">
+                @pager
+            </div>
+        }
+        @await Component.InvokeAsync("Widget", new { widgetZone = "newslist_page_after_items" })
+    </div>
+</div>
