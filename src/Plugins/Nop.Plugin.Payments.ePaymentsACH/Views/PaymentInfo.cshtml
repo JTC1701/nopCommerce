@@ -1,0 +1,61 @@
+﻿@using Nop.Core
+@inject IWebHelper webHelper
+@{
+    Layout = "";
+}
+
+@model Nop.Plugin.Payments.ePaymentsACH.Models.PaymentInfoModel
+<h5>Enter Bank Account information</h5>
+<table width="100%" cellspacing="2" cellpadding="1" border="0">
+    <tr>
+        <td>
+            <label asp-for="AccountholderName">@T("Payment.ACH.AccountholderName"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="AccountholderName" style="width:165px;" autocomplete="off" maxlength="30" />
+            <span asp-validation-for="AccountholderName"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="RoutingNbr">@T("Payment.ACH.RoutingNbr"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="RoutingNbr" style="width:165px;" autocomplete="off" maxlength="15" />
+            <span asp-validation-for="RoutingNbr"></span>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="AccountNbr">@T("Payment.ACH.AccountNbr"):</label>
+        </td>
+        <td>
+            <input type="text" asp-for="AccountNbr" style="width:165px;" autocomplete="off" maxlength="30" />
+            <span asp-validation-for="AccountNbr"></span>
+        </td>
+    </tr>
+</table>
+@*<div class="terms-of-service">
+
+    <input type="checkbox" asp-for="TermsAgreement" />
+    <span asp-validation-for="TermsAgreement"></span>
+
+    <label asp-for="TermsAgreement">I have read and accept the ACH payment Terms</label>
+    <a class="read" id="read-ach-terms"> (Read Terms)</a>
+    <script type="text/javascript" asp-location="Footer">
+                $(document).ready(function () {
+                    $('#read-ach-terms').on('click',
+                        function (e) {
+                            e.preventDefault();
+                            displayPopupContentFromUrl(
+                                '@Url.RouteUrl("TopicPopup", new {SystemName = "conditionsofuse"})',
+                                '@T("Checkout.TermsOfService")');
+                        });
+                });
+    </script>
+
+
+</div>*@
+
+
+

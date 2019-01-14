@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "ACH",
+  "SystemName": "Payments.ePaymentsACH",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.00" ],
+  "Author": "Timothy Crouse, Ingenico Group",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.ePaymentsACH.dll",
+  "Description": "This plugin will interface with the ePayments/Global Collect payment platform for ACH payments"
+}

@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Tax providers",
+  "FriendlyName": "Zip2Tax",
+  "SystemName": "Tax.Zip2Tax",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.00" ],
+  "Author": "Timothy Crouse, Ingenico Group",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Tax.Zip2Tax.dll",
+  "Description": "This plugin facilitates Tax lookup on https://www.zip2tax.com/ "
+}

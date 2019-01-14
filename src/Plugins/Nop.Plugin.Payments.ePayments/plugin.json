@@ -1,0 +1,11 @@
+﻿{
+  "Group": "Payment methods",
+  "FriendlyName": "Credit Card",
+  "SystemName": "Payments.ePayments",
+  "Version": "1.00",
+  "SupportedVersions": [ "4.00" ],
+  "Author": "Timothy Crouse, Ingenico Group",
+  "DisplayOrder": 1,
+  "FileName": "Nop.Plugin.Payments.ePayments.dll",
+  "Description": "This plugin will interface with the ePayments/Global Collect payment platform"
+}

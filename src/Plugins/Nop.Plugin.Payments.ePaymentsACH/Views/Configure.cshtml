@@ -1,0 +1,85 @@
+﻿@model Nop.Plugin.Payments.ePaymentsACH.Models.ConfigurationModel
+@inject Nop.Core.IWebHelper webHelper
+@{
+    Layout = "_ConfigurePlugin";
+}
+@await Component.InvokeAsync("StoreScopeConfiguration")
+
+<script type="text/javascript">
+	
+   
+</script>
+<form asp-controller="PaymentePaymentsACH" asp-action="Configure" method="post">
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="MerchantId_OverrideForStore" asp-input="MerchantId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="MerchantId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="MerchantId" />
+                        <span asp-validation-for="MerchantId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="ApiKeyId_OverrideForStore" asp-input="ApiKeyId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="ApiKeyId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="ApiKeyId" />
+                        <span asp-validation-for="ApiKeyId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="SecretApiKey_OverrideForStore" asp-input="SecretApiKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="SecretApiKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="SecretApiKey" />
+                        <span asp-validation-for="SecretApiKey"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="WebhookURL_OverrideForStore" asp-input="WebhookURL" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="WebhookURL" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="WebhookURL" />
+                        <span asp-validation-for="WebhookURL"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="WebhookKeyId_OverrideForStore" asp-input="WebhookKeyId" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="WebhookKeyId" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="WebhookKeyId" />
+                        <span asp-validation-for="WebhookKeyId"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        <nop-override-store-checkbox asp-for="WebhookSecretKey_OverrideForStore" asp-input="WebhookSecretKey" asp-store-scope="@Model.ActiveStoreScopeConfiguration" />
+                        <nop-label asp-for="WebhookSecretKey" />
+                    </div>
+                    <div class="col-md-9">
+                        <nop-editor asp-for="WebhookSecretKey" />
+                        <span asp-validation-for="WebhookSecretKey"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <input type="submit" name="save" class="btn bg-primary" value="@T("Admin.Common.Save")" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
